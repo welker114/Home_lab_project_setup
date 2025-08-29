@@ -1,0 +1,26 @@
+# Home Lab Project Setup
+
+## Phase 1: Prepare Ubuntu VM for App Development
+
+### Steps Completed
+
+1. **Update Ubuntu8**
+	- Command: 'sudo apt update && sudo apt upgrade -y'
+
+2. **Install Git and configure**
+	- Command: 'sudo apt install git -y'
+
+3. **Configure Git**
+	- Set name: 'git config --global user.name "Your name"
+	- Set email: 'git config --global user.email "your email"
+
+4. **Create project folder**
+	- Command: mkdir ~/home_lab_project
+	
+5. **Install virtual Environment Tool**
+	- Command: 'sudo apt install python3-venv -y'
+
+### Screeshots
+- system update.png - Terminal showing system update
+- System upgrade.png - Terminal showing system upgrade
+- python_and_git.xcf - Terminal showing python and git configuration
