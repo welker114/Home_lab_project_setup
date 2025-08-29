@@ -21,6 +21,6 @@
 	- Command: 'sudo apt install python3-venv -y'
 
 ### Screeshots
-- system update.png - Terminal showing system update
-- System upgrade.png - Terminal showing system upgrade
+- system_update.png - Terminal showing system update
+- System_upgrade.png - Terminal showing system upgrade
 - python_and_git.xcf - Terminal showing python and git configuration
