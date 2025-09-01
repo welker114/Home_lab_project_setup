@@ -23,4 +23,4 @@
 ### Screeshots
 - system_update.png - Terminal showing system update
 - System_upgrade.png - Terminal showing system upgrade
-- python_and_git.xcf - Terminal showing python and git configuration
+- python_and_git.png - Terminal showing python and git configuration
