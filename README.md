@@ -12,6 +12,7 @@ This repository documents the step-by-step setup of my **personal home lab envir
 
   * [Phase 1: Prepare Ubuntu VM for App Development](#phase-1-prepare-ubuntu-vm-for-app-development)
   * [Phase 2: Configure VM Networking & Shared Folders](#phase-2-configure-vm-networking--shared-folders)
+  * [Phase 3: Securing Ubuntu VM with UFW (Uncomplicated Firewall)](#phase-3-securing-ubuntu-vm-with-ufw)
   * (More phases will be added as the project evolves)
 
 ---
@@ -130,6 +131,43 @@ Configure VM networking for internet access and enable file sharing between host
 
 * `ping_test.png` – successful internet test.
 * `shared_folder.png` – shared folder mounted.
+
+## **Phase 3: Securing Ubuntu VM with UFW**
+
+**Goal:**
+Enable and configure a firewall (UFW) to secure my Ubuntu VM while still allowing necessary connections (like SSH for remote management)
+
+**Steps completed**
+
+1. **Check if UFW is installed**
+   ```bash
+   sudo apt list ufw
+   ```
+
+2. **Allow SSH traffic**
+   ```bash
+   sudo ufw allow ssh
+   ```
+
+3. **Allow HTTP/HTTPS traffic (for later web apps)**
+   ```bash
+   sudo ufw allow 80/tcp
+   sudo ufw allow 443/tcp
+   ```
+
+3. **Enable UFW**
+   ```bash
+   sudo ufw enable
+   ```
+
+4. **Check status**
+   ```bash
+   sudo ufw status
+
+   ```
+
+**Proof (Screenshots):**
+* `ufw_setup.png`
 
 ---
 
