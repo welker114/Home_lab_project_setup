@@ -169,6 +169,52 @@ Enable and configure a firewall (UFW) to secure my Ubuntu VM while still allowin
 **Proof (Screenshots):**
 * `ufw_setup.png`
 
+## **Phase 4: Python & Virtual Environment Setup**
+
+**Goal**
+Ensures my Ubuntu VM is properly configures with Python and virtual environment for backend development (without root). This isolates dependencies for my app backend.
+
+**Steps completed**
+
+1. **Verify Python installation**
+   ```bash
+   python3 --version
+   ```
+
+2. **Install pip (Python package manager)**
+   ```bash
+   sudo apt install python3-pip -y
+   ```
+
+3. **Install venv module (It allows to create iolated environments)**
+   ```bash
+   sudo apt install python3-venv -y
+   ```
+
+4. **Create a virtual environment inside my project folder**
+   ```bash
+   cd ~/home_lab_project
+   python3 -m venv venv
+   ```
+
+5. **Activate the virtual environment**
+   ```bash
+   source venv/bin/activate
+   ```
+
+6. **Test pip inside venv**
+   ```bash
+    pip list
+   ```
+
+7. **Deactivate when done**
+   ```bash
+   deactivate
+   ```
+
+**Proof (Screenshots)**
+   * `python_venv_setup.png` 
+
 ---
 
 Later phases (Windows Server setup, UFW firewall, backend deployment, NAS config) will be added to this doc.
