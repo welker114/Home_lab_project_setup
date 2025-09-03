@@ -13,6 +13,8 @@ This repository documents the step-by-step setup of my **personal home lab envir
   * [Phase 1: Prepare Ubuntu VM for App Development](#phase-1-prepare-ubuntu-vm-for-app-development)
   * [Phase 2: Configure VM Networking & Shared Folders](#phase-2-configure-vm-networking--shared-folders)
   * [Phase 3: Securing Ubuntu VM with UFW (Uncomplicated Firewall)](#phase-3-securing-ubuntu-vm-with-ufw)
+  * [Phase 4: Install Python & Virtual environment setup](#phase-4-install-python-&-virtual-environment-setup)
+  * [Phase 5: Install & Verify PostgreSQL (Database for Backend Development)](#phase-4-install-&-verify-postgresql)
   * (More phases will be added as the project evolves)
 
 ---
@@ -169,7 +171,7 @@ Enable and configure a firewall (UFW) to secure my Ubuntu VM while still allowin
 **Proof (Screenshots):**
 * `ufw_setup.png`
 
-## **Phase 4: Python & Virtual Environment Setup**
+## **Phase 4: Install Python & Virtual Environment Setup**
 
 **Goal**
 Ensures my Ubuntu VM is properly configures with Python and virtual environment for backend development (without root). This isolates dependencies for my app backend.
@@ -213,10 +215,84 @@ Ensures my Ubuntu VM is properly configures with Python and virtual environment 
    ```
 
 **Proof (Screenshots)**
-   * `python_venv_setup.png` 
+* `python_venv_setup.png` 
 
----
 
-Later phases (Windows Server setup, UFW firewall, backend deployment, NAS config) will be added to this doc.
+### **Phase 5: Install & Verify PostgreSQL**
 
----
+**Goal:**
+Set up PostgreSQL on my Ubuntu VM so my backend can connect to a real database.
+
+**Steps Completed:**
+
+1. **Update package lists**
+
+   ```bash
+   sudo apt update 
+   ```
+
+2. **Install PostgreSQL**
+
+   ```bash
+   sudo apt install postgresql postgresql-contrib -y
+   ```
+   - postgresql: installs the database server
+   - postgresql-contrib: adds extra tools/extensions
+
+3. **Check PostgreSQL service status**
+
+   ```bash
+   sudo systemctl status postgresql
+   ```
+   - Output: active(running)
+
+4. **Switch to the PostgreSQL default user**
+
+   ```bash
+   sudo -i -u postgres
+   ```
+
+5. **Open PostgreSQL shell**
+
+   ```bash
+   psql
+   ```
+
+6. **Create a database user for my backend app**
+
+   Inside psql:
+   ```bash
+   CREATE USER <username> WITH PASSWORD '<password>';
+   ```
+
+7. **Create a database for my app**
+
+   ```bash
+   CREATE DATABASE <DB_name> OWNER <user_name>;
+   ```
+
+8. **Grant privileges**
+
+   ```bash
+   GRANT ALL PRIVILEGES ON DATABASE <DB_name> TO <user_name>;
+   ```
+
+9. **Exit psql and postgres user**
+
+   Exit database shell:
+   ```bash
+   \q
+   ```
+
+   Exit postgres user:
+   ```bash
+   exit
+   ```
+
+10. **Test login with new user**
+
+   ```bash
+   psql -U <username> -d DB_name -h localhost
+   ```
+**Proof (Screenshots):**
+* `postgresql_install.png`
