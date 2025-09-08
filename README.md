@@ -13,8 +13,9 @@ This repository documents the step-by-step setup of my **personal home lab envir
   * [Phase 1: Prepare Ubuntu VM for App Development](#phase-1-prepare-ubuntu-vm-for-app-development)
   * [Phase 2: Configure VM Networking & Shared Folders](#phase-2-configure-vm-networking--shared-folders)
   * [Phase 3: Securing Ubuntu VM with UFW (Uncomplicated Firewall)](#phase-3-securing-ubuntu-vm-with-ufw)
-  * [Phase 4: Install Python & Virtual environment setup](#phase-4-install-python-&-virtual-environment-setup)
-  * [Phase 5: Install & Verify PostgreSQL (Database for Backend Development)](#phase-4-install-&-verify-postgresql)
+  * [Phase 4: Install Python & Virtual environment setup](#phase-4-install-python-and-virtual-environment-setup)
+  * [Phase 5: Install & Verify PostgreSQL (Database for Backend Development)](#phase-4-install-and-verify-postgresql)
+  * [Phase 6: Configure PostgreSQL to accept remote connections](#phase-6-configure-postgresql-to-accept-remote-connections)
   * (More phases will be added as the project evolves)
 
 ---
@@ -101,7 +102,8 @@ Configure VM networking for internet access and enable file sharing between host
 
 1. **Configure networking mode**
 
-   * VMware → VM Settings → Network Adapter → Select **Bridged**.
+   * VMware → VM Settings → Network Adapter → Select **Bridged** (IP config from my home router)
+   - This allows my VM and host PC to be in the same network so they can communicate
 
 2. **Test internet access**
 
@@ -171,7 +173,7 @@ Enable and configure a firewall (UFW) to secure my Ubuntu VM while still allowin
 **Proof (Screenshots):**
 * `ufw_setup.png`
 
-## **Phase 4: Install Python & Virtual Environment Setup**
+## **Phase 4: Install Python and Virtual Environment Setup**
 
 **Goal**
 Ensures my Ubuntu VM is properly configures with Python and virtual environment for backend development (without root). This isolates dependencies for my app backend.
@@ -296,3 +298,83 @@ Set up PostgreSQL on my Ubuntu VM so my backend can connect to a real database.
    ```
 **Proof (Screenshots):**
 * `postgresql_install.png`
+
+
+## **Phase 6: Configure PostgreSQL to accept remote connections**
+
+**Goal**
+Enable POstgreSQL on Ubuntu VM to accept connections from my host PC and any other devices in my allowed subnet
+
+**Steps completed**
+
+1. Check which IP addresses PostgreSQL is accepting connections from
+   ```bash
+   sudo ss -plunt | grep 5432
+   ```
+   - Output:(Only accepts internal connections) 
+   ```bash
+   tcp LISTEN 0 0 127.0.0.1:5432 0.0.0.* ...
+   ```
+   - Command breakdown:
+	- ss -> utility to view nework sockets
+   	- -plunt -> shows processes(p), listening ports(l), user info(u), numeric addresses(n), TCP(t)
+ 
+2. Edit PostgreSQL main configuration: Change listening addresses from localhost to everyone 
+   ```bash  
+   nano /etc/postgresql/16/main/postgresql.conf
+   ````
+   - Find the line: press (ctrl + W) then type:
+      ```bash
+      #listen_addresses = 'localhost'
+      ```
+   - Change to:
+      ```bash
+      listen_addresses = '*'
+      ```
+   - Save and exit -> ctrl+X, Y, Enter
+
+3. Edit PostgreSQL authentication file: Restrict connection to allowed subnet only
+   ```bash
+   host all all <subenet_ip> md5
+   ```
+   - Save and exit
+   - Command breakdown:
+      - host -> TCP/IP connection
+      - all -> all databases
+      - all -> all users
+      - <subnet_ip> -> only devices on a specific subnet
+      - md5 -> password authentication
+
+4. Allow PostgreSQL port through UFW firewall
+   ```bash
+   sudo ufw allow from <subnet_ip> to any port 5432 #allow incoming connection to port 5432 from <subnet_ip> only
+   sudo ufw reload #Reload UFW rules
+   sudo ufw status #Check UFW rules
+   ```
+
+5. Check if psql client is installed on Windows (my host system)
+   - Open PowerShell
+   ```powershell
+   psql --version
+   ```
+   - If not recognized, install PostgreSQL from their website and add PostgreSQL bin folder to PATH:
+   ```makefile
+   C:\Program Files\PostgreSQL\17\bin #17 is the psql version
+   ```
+
+6. Test connection to Ubuntu VM PostgreSQL
+   ```PowerShell
+   psql -h <ubuntu_vm_ip> -U <DB_username> -d <DB_name>
+   ```
+
+7. Enter password set for <DB_username> 
+
+8. Expected Output
+   ```ini
+   <DB_name>=>
+  ```
+
+**Proofs (Screenshots)**
+- `pg_hba_file_config.png`
+- `ufw_status.png`
+- `successful_host_psql_connection.png`
