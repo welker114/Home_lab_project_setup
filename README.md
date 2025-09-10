@@ -137,8 +137,8 @@ Configure VM networking for internet access and enable file sharing between host
 
 **Screenshots:**
 
-* ![Testing internet connection](`home_lab_project_setup/screenshots/ping_test.png`)
-* ![Shared folder mount](`home_lab_project_setup/screenshots/shared_folder.png`)
+* ![Testing internet connection](/screenshots/ping_test.png)
+* ![Shared folder mount](/screenshots/shared_folder.png)
 
 
 ## **Phase 3: Securing Ubuntu VM with UFW**
