@@ -14,7 +14,7 @@ This repository documents the step-by-step setup of my **personal home lab envir
   * [Phase 2: Configure VM Networking & Shared Folders](#phase-2-configure-vm-networking--shared-folders)
   * [Phase 3: Securing Ubuntu VM with UFW (Uncomplicated Firewall)](#phase-3-securing-ubuntu-vm-with-ufw)
   * [Phase 4: Install Python & Virtual environment setup](#phase-4-install-python-and-virtual-environment-setup)
-  * [Phase 5: Install & Verify PostgreSQL (Database for Backend Development)](#phase-4-install-and-verify-postgresql)
+  * [Phase 5: Install & Verify PostgreSQL (Database for Backend Development)](#phase-5-install-and-verify-postgresql)
   * [Phase 6: Configure PostgreSQL to accept remote connections](#phase-6-configure-postgresql-to-accept-remote-connections)
   * (More phases will be added as the project evolves)
 
@@ -59,6 +59,8 @@ Set up a clean Ubuntu environment with essential tools for development.
    ```bash
    sudo apt update && sudo apt upgrade -y
    ```
+   - sudo apt update -> refreshes  package list
+   - sudo apt upgrade -y -> installs available updates automatically (-y answers "yes" to prompts)
 
 2. **Install Git**
 
@@ -69,6 +71,8 @@ Set up a clean Ubuntu environment with essential tools for development.
 3. **Configure Git**
 
    ```bash
+   git init #Initializes repository in project folder
+   git remote add origin <repo_url> #link repo
    git config --global user.name "Your Name"
    git config --global user.email "your@email.com"
    ```
@@ -103,7 +107,7 @@ Configure VM networking for internet access and enable file sharing between host
 1. **Configure networking mode**
 
    * VMware → VM Settings → Network Adapter → Select **Bridged** (IP config from my home router)
-   - This allows my VM and host PC to be in the same network so they can communicate
+   - This allows my VM and host PC to be in the same network so they can communicate. Given that with bridged network the VM takes its IP address from the same DHCP server as your host PC.
 
 2. **Test internet access**
 
@@ -131,10 +135,11 @@ Configure VM networking for internet access and enable file sharing between host
    .host:/vm_shared   /mnt/hgfs/vm_shared   fuse.vmhgfs-fuse   defaults   0   0
    ```
 
-**Proof (Screenshots):**
+**Screenshots:**
 
-* `ping_test.png` – successful internet test.
-* `shared_folder.png` – shared folder mounted.
+* ![Testing internet connection](`screenshots/ping_test.png`)
+* ![Shared folder mount](`shared_folder.png`)
+
 
 ## **Phase 3: Securing Ubuntu VM with UFW**
 
@@ -335,19 +340,19 @@ Enable POstgreSQL on Ubuntu VM to accept connections from my host PC and any oth
 
 3. Edit PostgreSQL authentication file: Restrict connection to allowed subnet only
    ```bash
-   host all all <subenet_ip> md5
+   host all all 10.0.0.0/24 md5
    ```
    - Save and exit
    - Command breakdown:
       - host -> TCP/IP connection
       - all -> all databases
       - all -> all users
-      - <subnet_ip> -> only devices on a specific subnet
+      - 10.0.0.0/24 -> only devices on a specific subnet
       - md5 -> password authentication
 
 4. Allow PostgreSQL port through UFW firewall
    ```bash
-   sudo ufw allow from <subnet_ip> to any port 5432 #allow incoming connection to port 5432 from <subnet_ip> only
+   sudo ufw allow from 10.0.0.0/24 to any port 5432 #allow incoming connection to port 5432 from <subnet_ip> only
    sudo ufw reload #Reload UFW rules
    sudo ufw status #Check UFW rules
    ```
@@ -364,10 +369,13 @@ Enable POstgreSQL on Ubuntu VM to accept connections from my host PC and any oth
 
 6. Test connection to Ubuntu VM PostgreSQL
    ```PowerShell
-   psql -h <ubuntu_vm_ip> -U <DB_username> -d <DB_name>
+   psql -h 10.0.0.25 -U new_db -d welker
    ```
+   - -h 10.0.0.25 -> My Ubuntu IP address
+   - -U new_db -> my database name
+   - -d welker -> My postgreSQL username
 
-7. Enter password set for <DB_username> 
+7. Enter password set for *welker*
 
 8. Expected Output
    ```ini
