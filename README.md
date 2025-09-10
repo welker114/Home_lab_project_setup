@@ -13,9 +13,8 @@ This repository documents the step-by-step setup of my **personal home lab envir
   * [Phase 1: Prepare Ubuntu VM for App Development](#phase-1-prepare-ubuntu-vm-for-app-development)
   * [Phase 2: Configure VM Networking & Shared Folders](#phase-2-configure-vm-networking--shared-folders)
   * [Phase 3: Securing Ubuntu VM with UFW (Uncomplicated Firewall)](#phase-3-securing-ubuntu-vm-with-ufw)
-  * [Phase 4: Install Python & Virtual environment setup](#phase-4-install-python-and-virtual-environment-setup)
-  * [Phase 5: Install & Verify PostgreSQL (Database for Backend Development)](#phase-5-install-and-verify-postgresql)
-  * [Phase 6: Configure PostgreSQL to accept remote connections](#phase-6-configure-postgresql-to-accept-remote-connections)
+  * [Phase 4: Install & Verify PostgreSQL (Database for Backend Development)](#phase-4-install-and-verify-postgresql)
+  * [Phase 5: Configure PostgreSQL to accept remote connections](#phase-5-configure-postgresql-to-accept-remote-connections)
   * (More phases will be added as the project evolves)
 
 ---
@@ -175,57 +174,10 @@ Enable and configure a firewall (UFW) to secure my Ubuntu VM while still allowin
 
    ```
 
-**Proof (Screenshots):**
-* `ufw_setup.png`
+**Screenshots:**
+![Firewall (UFW) configuration](/screenshots/ufw_setup.png)
 
-## **Phase 4: Install Python and Virtual Environment Setup**
-
-**Goal**
-Ensures my Ubuntu VM is properly configures with Python and virtual environment for backend development (without root). This isolates dependencies for my app backend.
-
-**Steps completed**
-
-1. **Verify Python installation**
-   ```bash
-   python3 --version
-   ```
-
-2. **Install pip (Python package manager)**
-   ```bash
-   sudo apt install python3-pip -y
-   ```
-
-3. **Install venv module (It allows to create iolated environments)**
-   ```bash
-   sudo apt install python3-venv -y
-   ```
-
-4. **Create a virtual environment inside my project folder**
-   ```bash
-   cd ~/home_lab_project
-   python3 -m venv venv
-   ```
-
-5. **Activate the virtual environment**
-   ```bash
-   source venv/bin/activate
-   ```
-
-6. **Test pip inside venv**
-   ```bash
-    pip list
-   ```
-
-7. **Deactivate when done**
-   ```bash
-   deactivate
-   ```
-
-**Proof (Screenshots)**
-* `python_venv_setup.png` 
-
-
-### **Phase 5: Install & Verify PostgreSQL**
+### **Phase 4: Install & Verify PostgreSQL**
 
 **Goal:**
 Set up PostgreSQL on my Ubuntu VM so my backend can connect to a real database.
@@ -301,8 +253,8 @@ Set up PostgreSQL on my Ubuntu VM so my backend can connect to a real database.
    ```bash
    psql -U <username> -d DB_name -h localhost
    ```
-**Proof (Screenshots):**
-* `postgresql_install.png`
+**Screenshots:**
+[PostgreSQL installation](/screenshots/postgresql_install.png)
 
 
 ## **Phase 6: Configure PostgreSQL to accept remote connections**
@@ -382,7 +334,5 @@ Enable POstgreSQL on Ubuntu VM to accept connections from my host PC and any oth
    <DB_name>=>
   ```
 
-**Proofs (Screenshots)**
-- `pg_hba_file_config.png`
-- `ufw_status.png`
-- `successful_host_psql_connection.png`
+**Screenshots**
+![UFW status](/screenshots/ufw_status.png)
